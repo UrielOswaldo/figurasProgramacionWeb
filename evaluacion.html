@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <br>
+        <table align="center">
+            <tr>
+                <td>
+                    <form action="">
+                        <label>Seleccione figura a dibujar: </label>
+                        <select name="select" id="select" onchange="comboSelect()">
+                            <option value="" disabled selected style="display:none;"></option> 
+                            <option value="Triangulo" >Triangulo</option> 
+                            <option value="Cuadrado" >Cuadrado</option>
+                            <option value="Circulo" >Circulo</option>
+                        </select>
+                        <br><br><label id="lx">X: </label><input type="number" id="x" disabled><input type="number" id="x2" disabled>
+                        <br><br><label id="ly">Y: </label><input type="number" id="y" disabled><input type="number" id="y2" disabled>
+                        <br><br><label id="lw">Ancho: </label><input type="number" id="w" disabled><input type="number" id="w2" disabled>
+                        <br><br><label id="lh">Alto: </label><input type="number" id="h" disabled>
+                        <br><br><label>Color:  </label><input type="color" id="color" disabled>
+                        <br><br><input type="button" value="Dibujar" id="btnDibujar" onclick="dibujar()"></button>
+                    </form>
+                </td>
+                <td>
+                    <center><canvas id="miCanvas" width="500" height="400" style="border:1px solid #000000"></canvas></center>
+                </td>
+            </tr>
+        </table>
+        <br>
+    </body>
+    <script>
+        function comboSelect(){
+            var combo=document.getElementById("select").value;
+            if (combo=="Triangulo") {
+                document.getElementById("lx").innerHTML="x1,y1 (x1,y1):"
+                document.getElementById("ly").innerHTML="x2,y2 (x2,y2):"
+                document.getElementById("lw").innerHTML="x3,y3 (x3,y3):"
+                document.getElementById("x").disabled=false;
+                document.getElementById("y").disabled=false;
+                document.getElementById("w").disabled=false;
+                document.getElementById("x2").disabled=false;
+                document.getElementById("y2").disabled=false;
+                document.getElementById("w2").disabled=false;
+                document.getElementById("h").disabled=true;
+                document.getElementById("color").disabled=false;
+            }else if (combo=="Cuadrado") {
+                document.getElementById("lx").innerHTML="x:"
+                document.getElementById("ly").innerHTML="y:"
+                document.getElementById("lw").innerHTML="Ancho:"
+                document.getElementById("x").disabled=false;
+                document.getElementById("y").disabled=false;
+                document.getElementById("w").disabled=false;
+                document.getElementById("h").disabled=false;
+                document.getElementById("x2").disabled=true;
+                document.getElementById("y2").disabled=true;
+                document.getElementById("w2").disabled=true;
+                document.getElementById("color").disabled=false;
+            }else {
+                document.getElementById("lx").innerHTML="x:"
+                document.getElementById("ly").innerHTML="y:"
+                document.getElementById("lw").innerHTML="Radio:"
+                document.getElementById("x").disabled=false;
+                document.getElementById("y").disabled=false;
+                document.getElementById("w").disabled=false;
+                document.getElementById("h").disabled=true;
+                document.getElementById("x2").disabled=true;
+                document.getElementById("y2").disabled=true;
+                document.getElementById("w2").disabled=true;
+                document.getElementById("color").disabled=false;
+            }
+        }
+        function dibujar(){
+            var combo = document.getElementById("select").value;
+            if (combo=="Triangulo") {
+                if (document.getElementById("x").value=="" || document.getElementById("y").value=="" || document.getElementById("w").value=="" || document.getElementById("x2").value==""|| document.getElementById("y2").value==""|| document.getElementById("w2").value=="") {
+                    alert("Debe ingresar los datos necesarios...");
+                } else {
+                    dibujarTriangulo(document.getElementById("color").value, document.getElementById("x").value,document.getElementById("y").value,document.getElementById("w").value);
+                    vaciar();
+                }
+                
+
+            }else if (combo=="Cuadrado") {
+                if (document.getElementById("x").value=="" || document.getElementById("y").value=="" || document.getElementById("w").value=="" || document.getElementById("h").value=="") {
+                    alert("Ingrese todos los datos...");
+                } else {
+                    dibujarCuadrado(document.getElementById("color").value, document.getElementById("x").value,document.getElementById("y").value,document.getElementById("w").value,document.getElementById("h").value);
+                    vaciar();
+                }
+            }else {
+                if (document.getElementById("x").value=="" || document.getElementById("y").value=="" || document.getElementById("w").value=="") {
+                    alert("Ingrese todos los datos...");
+                } else {
+                    dibujarCirculo(document.getElementById("x").value,document.getElementById("y").value,document.getElementById("w").value,document.getElementById("color").value);
+                    vaciar();
+                }
+                
+            }
+        }
+
+        var canvas = document.getElementById('miCanvas');
+        var ctx = canvas.getContext('2d');
+
+        function dibujarCirculo(x,y,radio,color){
+            ctx.beginPath();
+            ctx.fillStyle = color;
+			ctx.arc((parseInt(x)+parseInt(radio)),(parseInt(y)+parseInt(radio)),radio,0,2*Math.PI);
+			ctx.fill();
+            ctx.closePath();
+        }
+        
+        function dibujarCuadrado(color, x, y , ancho, alto){
+            ctx.beginPath();
+            ctx.fillStyle =color;
+            ctx.fillRect(x,y,ancho,alto);
+            ctx.closePath();
+        }
+        function dibujarTriangulo(color, x1, x2, x3){
+            ctx.beginPath();
+            ctx.fillStyle =color;
+            ctx.moveTo(x1,document.getElementById("x2").value);
+            ctx.lineTo(x2,document.getElementById("y2").value);
+            ctx.lineTo(x3,document.getElementById("w2").value);
+            ctx.fill();
+            ctx.closePath();
+        }
+        function vaciar(){
+            document.getElementById("x").value="";
+            document.getElementById("x2").value="";
+            document.getElementById("y").value="";
+            document.getElementById("y2").value="";
+            document.getElementById("w").value="";
+            document.getElementById("w2").value="";
+            document.getElementById("h").value="";
+        }
+    </script>
+</html>
